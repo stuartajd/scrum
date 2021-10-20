@@ -65,15 +65,11 @@
 			}
 
 			.fs-small {
-				font-size:  12px;
+				font-size:  14px;
 			}
 		</style>
 	</head>
 	<body>
-		<!--[if IE]>
-			You are using an unsupported browser, please use Google Chrome, Mozilla Firefox or Microsoft Edge.
-		<![endif]-->
-
 		<noscript>
 			You are using an unsupported browser, please enable Javascript to use this application.
 		</noscript>
@@ -219,7 +215,7 @@
 					</div>
 
 					<div class="text-center my-5 fs-small">
-						<p class="mb-2">Created with <span class="text-danger">♥</span> by <a href="https://www.stuartd.co.uk" target="_blank" class="btn fs-small btn-link m-0 p-0">Stuart</a></p>
+						<p class="mb-2">Created with <span class="text-danger">♥</span> by Stuart</p>
 						<button @click="clearAllTasks" class="btn btn-link fs-small">Clear All Tasks</button>						
 						<button @click="clearAll" class="btn btn-link fs-small">Reset Everything</button>
 					</div>
@@ -227,7 +223,7 @@
 			</div>
 		</main>
 
-		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
 
@@ -247,28 +243,28 @@
 						lightMode: true
 					}
 				},
-				mounted(){
-					var tasks = localStorage.getItem('scrumTasks') || "[]"
+				mounted: function(){
+					var tasks = this.fetchFromStorage("scrumTasks", JSON.stringify([]));
 					this.tasks = JSON.parse(tasks);
 
 					this.settings.lightMode = !(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-					var tasks = localStorage.getItem('scrumSettings') || {}
+					var tasks = this.fetchFromStorage("scrumSettings", {});
 					this.settings = Object.assign(this.settings, JSON.parse(tasks));
 				},
 				watch: {
-					tasks(){
+					tasks: function(){
 						this.sync();
 					}
 				},
 				computed: {
-					tasksWithDetails(){
-						return this.tasks.filter(task => task.name.trim().length && task.status.trim().length);
+					tasksWithDetails: function(){
+						return this.tasks.filter(function(task) { return task.name.trim().length && task.status.trim().length });
 					},
-					blockedTasks(){
-						return this.tasks.filter(task => task.blocked);
+					blockedTasks: function(){
+						return this.tasks.filter(function(task) { return task.blocked });
 					},
-					todaysDate(){
+					todaysDate: function(){
 						var date = new Date();
 						return ('0' + date.getDate()).slice(-2) + '/'
              					+ ('0' + (date.getMonth()+1)).slice(-2) + '/'
@@ -276,15 +272,19 @@
 					}
 				},
 				methods: {
-					useLightMode(status){
+					fetchFromStorage: function(key, defaultValue){
+						var item = localStorage.getItem(key);
+						return item || defaultValue;
+					},
+					useLightMode: function(status){
 						this.settings.lightMode = status;
 						this.sync();
 					},
-					sync() {
+					sync: function() {
 						localStorage.setItem('scrumTasks', JSON.stringify(this.tasks));
 						localStorage.setItem('scrumSettings', JSON.stringify(this.settings));
 					},
-					copy() {
+					copy: function() {
 					    var range = document.createRange();
 					    range.selectNode(this.$refs.taskNotes); 
 					    window.getSelection().removeAllRanges(); 
@@ -292,7 +292,7 @@
 					    document.execCommand("copy");
 						window.getSelection().removeAllRanges();
 					},
-					create() {
+					create: function() {
 						this.isCreating = true;
 						var task = {
 							uid: Date.now().toString(36) + Math.random().toString(36).substr(2),
@@ -304,27 +304,27 @@
 						this.selectedTask = task;
 						this.tasks.push(task);
 					},
-					edit(task){
+					edit: function(task){
 						this.isCreating = false;
 						this.selectedTask = task;
 					},
-					remove(task){
+					remove: function(task){
 						if(this.selectedTask !== null && task.uid === this.selectedTask.uid){
 							this.selectedTask = null;
 						}
 
-						this.tasks = this.tasks.filter(t => t.uid !== task.uid);
+						this.tasks = this.tasks.filter(function(t) { return t.uid !== task.uid });
 					},
-					clearAllTasks(){
+					clearAllTasks: function(){
 						this.tasks = [];
 						this.sync();
 					},
-					clearAll(){
+					clearAll: function(){
 						this.settings.name = "";
 						this.settings.capacity = "";
 						this.clearAllTasks();
 					},
-					close(){
+					close: function(){
 						this.selectedTask = null;
 						this.isCreating = false;
 					}
