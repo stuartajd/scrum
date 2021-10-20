@@ -71,12 +71,12 @@
 	</head>
 	<body>
 		<main v-cloak id="app" class="h-100" :class="{ darkMode: !settings.lightMode }">
-			<div class="border p-3 mb-3 output visually-hidden" ref="taskNotes">
+			<div class="border p-3 mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;">
 				<p>
 					<strong>{{settings.name}}</strong><br />
 					<strong>{{todaysDate}}</strong><br />
 					<br />
-					<strong>Capacity:</strong> <span class="text-capitalize">{{settings.capacity}}</span><br />
+					<strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span><br />
 					<strong>Blocked on {{blockedTasks.length}} task(s)</strong>
 				</p>
 
@@ -277,11 +277,11 @@
 						localStorage.setItem('scrumSettings', JSON.stringify(this.settings));
 					},
 					copy() {
-						var range = document.createRange();
-					  	range.selectNode(this.$refs.taskNotes);
-						window.getSelection().removeAllRanges(); 
-						window.getSelection().addRange(range); 
-						document.execCommand("copy");
+					    var range = document.createRange();
+					    range.selectNode(this.$refs.taskNotes); 
+					    window.getSelection().removeAllRanges(); 
+					    window.getSelection().addRange(range);
+					    document.execCommand("copy");
 						window.getSelection().removeAllRanges();
 					},
 					create() {
