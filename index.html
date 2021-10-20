@@ -29,8 +29,8 @@
 			}
 
 			.output > * {
-				font-family: sans-serif!important;
-				font-size: 13px!important;
+				font-family: Calibri, sans-serif!important;
+				font-size: 11pt!important;
 				background-color: transparent!important;
 			}
 
@@ -39,12 +39,16 @@
 				color: white;
 			}
 
+			.btn-link {
+				color: black;
+			}
+
 			.darkMode input, .darkMode input:focus, .darkMode select, .darkMode .list-group-item {
 				background-color:  #444;
 				color: #eee;
 			}
 
-			.darkMode h2, .darkMode label, .darkMode .handle, .darkMode svg:not(.ignore-dark-mode) {
+			.darkMode h2, .darkMode .btn-link, .darkMode label, .darkMode .handle, .darkMode svg:not(.ignore-dark-mode) {
 				color:  #eee;
 			}
 
@@ -69,7 +73,7 @@
 					<strong>{{todaysDate}}</strong><br />
 					<br />
 					<strong>Capacity:</strong> <span class="text-capitalize">{{settings.capacity}}</span><br />
-					<strong>Blocked on {{blockedTasks.length}} tasks</strong>
+					<strong>Blocked on {{blockedTasks.length}} task(s)</strong>
 				</p>
 
 				<template v-for="task in tasksWithDetails">
@@ -203,9 +207,9 @@
 					</div>
 
 					<div class="text-center my-5 fs-small">
-						<p class="mb-2">Created with <span class="text-danger">♥</span> by <a href="https://www.stuartd.co.uk" target="_blank" class="text-black">Stuart</a></p>
-						<button @click="clearAllTasks" class="btn btn-link text-dark fs-small">Clear All Tasks</button>						
-						<button @click="clearAll" class="btn btn-link text-dark fs-small">Reset Everything</button>
+						<p class="mb-2">Created with <span class="text-danger">♥</span> by <a href="https://www.stuartd.co.uk" target="_blank" class="btn fs-small btn-link m-0 p-0">Stuart</a></p>
+						<button @click="clearAllTasks" class="btn btn-link fs-small">Clear All Tasks</button>						
+						<button @click="clearAll" class="btn btn-link fs-small">Reset Everything</button>
 					</div>
 				</div>
 			</div>
