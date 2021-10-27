@@ -105,7 +105,7 @@
 
 				<template v-for="task in tasksWithDetails">
 					<strong>Task:</strong> {{task.name}}<br />
-					<strong>Status:</strong> {{task.status}}<br />
+					<template v-if="task.status.length"><strong>Status:</strong> {{task.status}}<br /></template>
 					<strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}<br /><br />
 				</template>
 			</div>
@@ -245,7 +245,7 @@
 										</div>
 										<div>
 											<h6 class="my-0">{{task.name || "Set a Task Name"}}</h6>
-											<small class="text-muted">{{task.status || "Set a Task Status"}}</small>
+											<small v-if="task.status.length" class="text-muted">{{task.status || "Set a Task Status"}}</small>
 										</div>
 									</div>
 									<div class="flex-shrink-0">
@@ -317,7 +317,7 @@
 				},
 				computed: {
 					tasksWithDetails: function(){
-						return this.tasks.filter(function(task) { return task.name.trim().length && task.status.trim().length });
+						return this.tasks.filter(function(task) { return task.name.trim().length });
 					},
 					blockedTasks: function(){
 						return this.tasks.filter(function(task) { return task.blocked });
