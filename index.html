@@ -77,6 +77,10 @@
 				border: 1px solid #f52073;
 			}
 
+			.whitespace-pre-line {
+				white-space: pre-line;
+			}
+
 			.spinner {
 				animation: 1.5s ease-in-out infinite spinner;
 			}
@@ -105,7 +109,7 @@
 
 				<template v-for="task in tasksWithDetails">
 					<strong>Task:</strong> {{task.name}}<br />
-					<template v-if="task.status.length"><strong>Status:</strong> {{task.status}}<br /></template>
+					<span v-if="task.status.length" class="whitespace-pre-line"><strong>Status:</strong> {{task.status}}<br /></span>
 					<strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}<br /><br />
 				</template>
 			</div>
@@ -137,8 +141,8 @@
 				        </select>
 
 				        <div v-if="migration.source">
-			        		<p class="text-muted small">Run the following command in the browser developer console to generate the migration content.</p>
-				        	<pre><code v-if="migration.source === 'scrumhelper'" class="d-block word-wrap p-2">console.log(localStorage.getItem("tasklistV2"));</code></pre>
+			        		<p class="text-muted small">Run the following command in the main URL bar whilst on the website you're importing the data from.</p>
+				        	<pre><code v-if="migration.source === 'scrumhelper'" class="d-block word-wrap p-2">javascript:(function(){ prompt("Copy the following and paste back into Scrum.", localStorage.getItem("tasklistV2")); })();</code></pre>
 
 				        	<p class="text-muted small">Paste the content of the output here:</p>
 				       	 	<textarea v-model="migration.content" class="form-control" rows="5"></textarea>
@@ -245,7 +249,7 @@
 										</div>
 										<div>
 											<h6 class="my-0">{{task.name || "Set a Task Name"}}</h6>
-											<small v-if="task.status.length" class="text-muted">{{task.status || "Set a Task Status"}}</small>
+											<small v-if="task.status.length" class="text-muted whitespace-pre-line">{{task.status || "Set a Task Status"}}</small>
 										</div>
 									</div>
 									<div class="flex-shrink-0">
