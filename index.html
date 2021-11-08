@@ -108,7 +108,7 @@
 				<template v-for="task in tasksWithDetails">
 					<strong>Task:</strong> {{task.name}}<br />
 
-					<span class="whitespace-pre-line"><strong>Status:</strong> 
+					<span v-if="(task.techStatus && task.techStatus.length) || task.status.length" class="whitespace-pre-line"><strong>Status:</strong> 
 						<span v-if="task.techStatus && task.techStatus.length">[{{task.techStatus}}]</span> <span v-if="task.status.length" >{{task.status}}</span><br />
 					</span>
 					
@@ -233,8 +233,8 @@
 							</div>
 							<draggable v-if="tasks.length" v-model="tasks" handle=".handle" class="list-group mb-3 border">
 								<div v-for="(task, index) in tasks" :key="task.uid" class="list-group-item d-flex align-items-center justify-content-between lh-sm">
-									<div class="d-flex justify-content-start">
-										<div class="me-3 align-self-center">
+									<div class="d-flex justify-content-start align-items-center">
+										<div class="me-3">
 											<div class="handle">
 												<svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
 											</div>
