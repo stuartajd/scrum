@@ -103,9 +103,9 @@
 			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;">
 				<strong>{{settings.name}}</strong><br />
 				<strong>{{todaysDate}}</strong><br /><br />
-				<strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span><br />
+				<strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span>
 				<template v-if="blockedTasks.length">
-					<strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
+					<br /><strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
 				</template>
 
 				<template v-for="task in tasksWithDetails">
