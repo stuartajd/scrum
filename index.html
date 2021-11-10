@@ -92,6 +92,9 @@
 				50% { transform: rotate(15deg) scale(1.1); }
 				to { transform: rotate(-10deg) scale(1); }
 			}
+
+			.colour-red { color: #fd6262; }
+			.colour-orange { color: #df9000; }
 		</style>
 	</head>
 	<body>
@@ -100,8 +103,7 @@
 		</noscript>
 
 		<main v-cloak id="app" class="h-100" :class="{ darkMode: !settings.lightMode }" >
-			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;">
-				<strong>{{settings.name}}</strong><br />
+			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;"><strong>{{settings.name}}</strong><br />
 				<strong>{{todaysDate}}</strong><br /><br />
 				<strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span>
 				<template v-if="blockedTasks.length">
@@ -116,8 +118,7 @@
 					</span>
 					
 					<span v-if="task.priority" class="text-capitalize"><strong>Priority:</strong> {{task.priority}}<br /></span>
-					<strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}
-				</template>
+					<strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}</template>
 			</div>
 				
 			<div class="container position-relative">
@@ -292,13 +293,13 @@
 
 												<div v-if="settings.view === 'full'" class="darker mt-2 fs-small d-flex align-items-center justify-content-start">
 													<span v-if="task.priority" content="Task Priority" v-tippy="{ arrow: true }">
-														<span v-if="task.priority === 'high'" class="me-4">
+														<span v-if="task.priority === 'high'" class="me-4 colour-red">
 															<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><g><rect fill="none" height="24" width="24"/></g><g><g><polygon points="6,17.59 7.41,19 12,14.42 16.59,19 18,17.59 12,11.59"/><polygon points="6,11 7.41,12.41 12,7.83 16.59,12.41 18,11 12,5"/></g></g></svg>
 
 															High Priority
 														</span>
 
-														<span v-if="task.priority === 'medium'" class="me-4">
+														<span v-if="task.priority === 'medium'" class="me-4 colour-orange">
 															<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14l-6-6z"/></svg>
 
 															Medium Priority
@@ -321,7 +322,7 @@
 														Not Blocked
 													</span>
 
-													<span class="me-4" v-if="task.blocked" content="Blocked Status" v-tippy="{ arrow: true }">
+													<span class="me-4 colour-red" v-if="task.blocked" content="Blocked Status" v-tippy="{ arrow: true }">
 														<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
 														Blocked
 													</span>
