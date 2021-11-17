@@ -103,7 +103,7 @@
 		</noscript>
 
 		<main v-cloak id="app" class="h-100" :class="{ darkMode: !settings.lightMode }" >
-			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;"><strong>{{settings.name}}</strong><br /><strong>{{todaysDate}}</strong><br /><br /><strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span>				<template v-if="blockedTasks.length"><br /><strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>				</template><template v-for="task in tasksWithDetails"><br /><br /><strong>Task:</strong> {{task.name}}<br /><span v-if="(task.techStatus && task.techStatus.length) || task.status.length" class="whitespace-pre-line"><strong>Status:</strong><span v-if="task.techStatus && task.techStatus.length">[{{task.techStatus}}]</span> <span v-if="task.status.length" >{{task.status}}</span><br /></span><span v-if="task.priority" class="text-capitalize"><strong>Priority:</strong> {{task.priority}}<br /></span><strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}</template></div>
+			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;"><strong>{{settings.name}}</strong><br /><strong>{{todaysDate}}</strong><br /><br /><strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span>				<template v-if="blockedTasks.length"><br /><strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>				</template><template v-for="task in tasksWithDetails"><br /><br /><strong>Task:</strong> {{task.name}}<br /><span v-if="(task.techStatus && task.techStatus.length) || task.status.length" class="whitespace-pre-line"><strong>Status:</strong><span v-if="task.techStatus && task.techStatus.length"> [{{task.techStatus}}]</span> <span v-if="task.status.length" >{{task.status}}</span><br /><span v-if="task.dueDate && task.dueDate.length">Due Date: {{task.dueDate}}</span><br /></span><span v-if="task.priority" class="text-capitalize"><strong>Priority:</strong> {{task.priority}}<br /></span><strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}</template></div>
 				
 			<div class="container position-relative">
 				<div class="position-absolute end-0 py-3">
@@ -170,13 +170,14 @@
 							  	<label for="taskName" class="form-label">Task Name</label>
 							  	<input type="text" v-model="selectedTask.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
 							</div>
+							
 							<div class="mb-3">
 							  	<label for="taskStatus" class="form-label">Task Status</label>
 							  	<textarea class="form-control" v-model="selectedTask.status" id="taskStatus" rows="3"></textarea>
 							</div>
 
-							<div class="d-flex align-items-start my-3 justify-content-between">
-								<div class="col-5">
+							<div class="row gx-3 align-items-start my-3 justify-content-between">
+								<div class="col-6">
 								  	<label for="techStatus" class="form-label">Tech Status</label>
 								  	<select id="techStatus" v-model="selectedTask.techStatus" class="form-select">
 									  	<option value="" selected disabled>Select Tech Status</option>
@@ -199,26 +200,33 @@
 								</div>
 
 								<div class="col-6">
-									<div>
-									  	<label for="priority" class="form-label">Task Priority</label>
+									<div class="mb-3">
+									  	<label for="dueDate" class="form-label">Task Due Date</label>
+									  	<input type="date" class="form-control" v-model="selectedTask.dueDate" id="dueDate" />
 									</div>
+								</div>
+							</div>
 
-									<div class="form-check form-check-inline">
-									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
-									  	<label class="form-check-label" for="none">Not a Priority</label>
-									</div>
-									<div class="form-check form-check-inline">
-									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
-									  	<label class="form-check-label" for="low">Low</label>
-									</div>
-									<div class="form-check form-check-inline">
-									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
-									  	<label class="form-check-label" for="medium">Medium</label>
-									</div>
-									<div class="form-check form-check-inline">
-									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
-									  	<label class="form-check-label" for="high">High</label>
-									</div>
+							<div class="mb-3">
+								<div>
+								  	<label for="priority" class="form-label">Task Priority</label>
+								</div>
+
+								<div class="form-check form-check-inline">
+								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
+								  	<label class="form-check-label" for="none">Not a Priority</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
+								  	<label class="form-check-label" for="low">Low</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
+								  	<label class="form-check-label" for="medium">Medium</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
+								  	<label class="form-check-label" for="high">High</label>
 								</div>
 							</div>
 
@@ -311,9 +319,9 @@
 														Blocked
 													</span>
 
-													<span v-if="task.createdDate" content="Date Added" v-tippy="{ arrow: true }">
+													<span v-if="task.dueDate" content="Due Date" v-tippy="{ arrow: true }">
 														<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><path d="M0 0h24v24H0z" fill="none"/><path d="M22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM12.5 8H11v6l4.75 2.85.75-1.23-4-2.37V8zM12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
-														{{new Date(task.createdDate).toLocaleDateString()}}
+														{{new Date(task.dueDate).toLocaleDateString()}}
 													</span>
 
 
@@ -510,6 +518,7 @@
 							status: '',
 							techStatus: '',
 							priority: '',
+							dueDate: '',
 							createdDate: Date.now(),
 							blocked: false
 						};
