@@ -103,7 +103,7 @@
 		</noscript>
 
 		<main v-cloak id="app" class="h-100" :class="{ darkMode: !settings.lightMode }" >
-			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;">
+			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 11pt;"><span>
 				<strong>{{settings.name}}</strong><br />
 				<strong>{{todaysDate}}</strong><br /><br />
 				<strong>Capacity:</strong> <span style="text-transform:capitalize">{{settings.capacity}}</span>
@@ -130,7 +130,7 @@
 
 					<strong>Blocked:</strong> {{(task.blocked) ? 'Yes' : 'No'}}
 				</template>
-			</div>
+			</span></div>
 				
 			<div class="container position-relative">
 				<div class="position-absolute end-0 py-3">
