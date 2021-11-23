@@ -133,7 +133,7 @@
 			</span></div>
 				
 			<div class="container position-relative">
-				<div class="position-absolute end-0 py-3">
+				<div class="position-absolute end-0 py-3 me-2">
 					<div v-if="settings.lightMode">
 						<svg @click="useLightMode(false)" class="text-dark cursor-pointer spinner" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="30px" viewBox="0 0 24 24" width="30px" fill="currentColor"><rect fill="none" height="24" width="24"/><path d="M11.01,3.05C6.51,3.54,3,7.36,3,12c0,4.97,4.03,9,9,9c4.63,0,8.45-3.5,8.95-8c0.09-0.79-0.78-1.42-1.54-0.95 c-0.84,0.54-1.84,0.85-2.91,0.85c-2.98,0-5.4-2.42-5.4-5.4c0-1.06,0.31-2.06,0.84-2.89C12.39,3.94,11.9,2.98,11.01,3.05z"/></svg>
 					</div>
@@ -184,96 +184,99 @@
 							</div>
 						</div>						
 					</div>
-					
-					<div v-if="selectedTask" class="border p-3 mb-4">
-						<div>
-							<h2 class="text-muted fw-bold"><template v-if="isCreating">New</template><template v-else>Edit</template> Task</h2>
-						</div>
 
-						<p class="text-muted small">Tasks need to have atleast a name specified to be included in the scrum notes.</p>
-
-						<div>
-							<div class="mb-3">
-							  	<label for="taskName" class="form-label">Task Name</label>
-							  	<input type="text" v-model="selectedTask.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
-							</div>
-							
-							<div class="mb-3">
-							  	<label for="taskStatus" class="form-label">Task Status</label>
-							  	<textarea class="form-control" v-model="selectedTask.status" id="taskStatus" rows="3"></textarea>
+					<div ref="taskEditor">
+						<div v-if="selectedTask" class="border p-3 mb-4">
+							<div>
+								<h2 class="text-muted fw-bold"><template v-if="isCreating">New</template><template v-else>Edit</template> Task</h2>
 							</div>
 
-							<div class="row gx-3 align-items-start my-3 justify-content-between">
-								<div class="col-6">
-								  	<label for="techStatus" class="form-label">Tech Status</label>
-								  	<select id="techStatus" v-model="selectedTask.techStatus" class="form-select">
-									  	<option value="" selected disabled>Select Tech Status</option>
-										<option value="Awaiting Content">Awaiting Content</option>
-										<option value="Awaiting Brief">Awaiting Brief</option>
-										<option value="Ready to start">Ready to start</option>
-										<option value="Pre-Build Checks">Pre-Build Checks</option>
-										<option value="Blocked">Blocked</option>
-										<option value="On Hold">On Hold</option>
-										<option value="Queued">Queued</option>
-										<option value="At Risk">At Risk</option>
-										<option value="In Progress">In Progress</option>
-										<option value="Ready for QA">Ready for QA</option>
-										<option value="Post QA - development">Post QA - development</option>
-										<option value="With Client">With Client</option>
-										<option value="With Client Team">With Client Team</option>
-										<option value="Signed Off">Signed Off</option>
-										<option value="Complete">Complete</option>
-									</select>
+							<p class="text-muted small">Tasks need to have atleast a name specified to be included in the scrum notes.</p>
+
+							<div>
+								<div class="mb-3">
+								  	<label for="taskName" class="form-label">Task Name</label>
+								  	<input type="text" v-model="selectedTask.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
+								</div>
+								
+								<div class="mb-3">
+								  	<label for="taskStatus" class="form-label">Task Status</label>
+								  	<textarea class="form-control" v-model="selectedTask.status" id="taskStatus" rows="3"></textarea>
 								</div>
 
-								<div class="col-6">
-									<div class="mb-3">
-									  	<label for="dueDate" class="form-label">Task Due Date</label>
-									  	<input type="date" class="form-control" v-model="selectedTask.dueDate" id="dueDate" />
+								<div class="row gx-3 align-items-start my-3 justify-content-between">
+									<div class="col-6">
+									  	<label for="techStatus" class="form-label">Tech Status</label>
+									  	<select id="techStatus" v-model="selectedTask.techStatus" class="form-select">
+										  	<option value="" selected disabled>Select Tech Status</option>
+											<option value="Awaiting Content">Awaiting Content</option>
+											<option value="Awaiting Brief">Awaiting Brief</option>
+											<option value="Ready to start">Ready to start</option>
+											<option value="Pre-Build Checks">Pre-Build Checks</option>
+											<option value="Blocked">Blocked</option>
+											<option value="On Hold">On Hold</option>
+											<option value="Queued">Queued</option>
+											<option value="At Risk">At Risk</option>
+											<option value="In Progress">In Progress</option>
+											<option value="Ready for QA">Ready for QA</option>
+											<option value="Post QA - development">Post QA - development</option>
+											<option value="With Client">With Client</option>
+											<option value="With Client Team">With Client Team</option>
+											<option value="Signed Off">Signed Off</option>
+											<option value="Complete">Complete</option>
+										</select>
+									</div>
+
+									<div class="col-6">
+										<div class="mb-3">
+										  	<label for="dueDate" class="form-label">Task Due Date</label>
+										  	<input type="date" class="form-control" v-model="selectedTask.dueDate" id="dueDate" />
+										</div>
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<div>
+									  	<label for="priority" class="form-label">Task Priority</label>
+									</div>
+
+									<div class="form-check form-check-inline">
+									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
+									  	<label class="form-check-label" for="none">Not a Priority</label>
+									</div>
+									<div class="form-check form-check-inline">
+									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
+									  	<label class="form-check-label" for="low">Low</label>
+									</div>
+									<div class="form-check form-check-inline">
+									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
+									  	<label class="form-check-label" for="medium">Medium</label>
+									</div>
+									<div class="form-check form-check-inline">
+									  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
+									  	<label class="form-check-label" for="high">High</label>
+									</div>
+								</div>
+
+								
+								<div class="mb-3">
+								  	<div class="form-check form-switch">
+									  	<input class="form-check-input" v-model="selectedTask.blocked" type="checkbox" role="switch" id="taskBlocked">
+									  	<label class="form-check-label" for="taskBlocked">Is this task blocked?</label>
 									</div>
 								</div>
 							</div>
 
-							<div class="mb-3">
-								<div>
-								  	<label for="priority" class="form-label">Task Priority</label>
-								</div>
+							<div>
+								<button v-if="!isCreating" @click="remove(selectedTask)" class="btn btn-danger btn-sm">Delete Task</button>
+								<button v-if="!isCreating" @click="close" class="btn btn-success btn-sm">Save Task</button>
 
-								<div class="form-check form-check-inline">
-								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
-								  	<label class="form-check-label" for="none">Not a Priority</label>
-								</div>
-								<div class="form-check form-check-inline">
-								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
-								  	<label class="form-check-label" for="low">Low</label>
-								</div>
-								<div class="form-check form-check-inline">
-								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
-								  	<label class="form-check-label" for="medium">Medium</label>
-								</div>
-								<div class="form-check form-check-inline">
-								  	<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
-								  	<label class="form-check-label" for="high">High</label>
-								</div>
+								<button v-if="isCreating" @click="remove(selectedTask, true)" class="btn btn-secondary btn-sm">Cancel</button>
+								<button v-if="isCreating" @click="close" class="btn btn-success btn-sm">Create Task</button>
 							</div>
-
-							
-							<div class="mb-3">
-							  	<div class="form-check form-switch">
-								  	<input class="form-check-input" v-model="selectedTask.blocked" type="checkbox" role="switch" id="taskBlocked">
-								  	<label class="form-check-label" for="taskBlocked">Is this task blocked?</label>
-								</div>
-							</div>
-						</div>
-
-						<div>
-							<button v-if="!isCreating" @click="remove(selectedTask)" class="btn btn-danger btn-sm">Delete Task</button>
-							<button v-if="!isCreating" @click="close" class="btn btn-success btn-sm">Save Task</button>
-
-							<button v-if="isCreating" @click="remove(selectedTask, true)" class="btn btn-secondary btn-sm">Cancel</button>
-							<button v-if="isCreating" @click="close" class="btn btn-success btn-sm">Create Task</button>
-						</div>
+						</div>	
 					</div>
+										
 
 					<div>
 						<div class="mb-3 d-flex align-items-center justify-content-between">
@@ -549,13 +552,16 @@
 							createdDate: Date.now(),
 							blocked: false
 						};
-
-						this.selectedTask = task;
+					
 						this.tasks.push(task);
+						this.selectedTask = task;
+						this.$refs.taskEditor.scrollIntoView(true);						
 					},
 					edit: function(task){
 						this.isCreating = false;
 						this.selectedTask = task;
+						console.log(this.$refs);
+						this.$refs.taskEditor.scrollIntoView(true);
 					},
 					remove: function(task, force){
 						if(this.selectedTask !== null && task.uid === this.selectedTask.uid){
