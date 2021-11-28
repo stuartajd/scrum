@@ -103,7 +103,7 @@
 		</noscript>
 
 		<main v-cloak id="app" class="h-100" :class="{ darkMode: !settings.lightMode }" >
-			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 10pt;"><span>
+			<div class="border mb-3 output visually-hidden" ref="taskNotes" style="font-family: Calibri, sans-serif;font-size: 10pt;"><pre>
 				<strong>{{settings.name}}</strong><br />
 				<strong>{{todaysDate}}</strong>
 				
@@ -136,7 +136,7 @@
 				<template v-if="settings.capacity">
 					<br /><u><strong>Capacity: <span style="text-transform:capitalize">{{settings.capacity}}</span></strong></u>
 				</template>
-			</span></div>
+			</pre></div>
 				
 			<div class="container position-relative">
 				<div class="position-absolute end-0 py-3 me-2">
