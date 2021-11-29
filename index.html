@@ -81,7 +81,7 @@
 
 			.spinner {
 				animation: 1.5s ease-in-out infinite spinner;
-			}
+			} 
 
 			@keyframes spinner { 
 				from { transform: rotate(-10deg) scale(1); }
@@ -91,6 +91,17 @@
 
 			.colour-red { color: #fd6262; }
 			.colour-orange { color: #df9000; }
+
+			.swal2-html-container {
+				text-align:  left!important;
+				font-size:  16px!important;
+			}
+
+			.darkMode ~ .swal2-container .swal2-popup, .darkMode ~ .swal2-container .swal2-title, .darkMode ~ .swal2-container .swal2-html-container, .darkMode ~ .swal2-container .swal2-html-container * {
+				background:  #2f2f2f!important;
+				background-color:  #2f2f2f!important;
+				color:  #eee!important;
+			}
 		</style>
 	</head>
 	<body>
@@ -155,17 +166,6 @@
 							<svg class="ignore-dark-mode me-3" xmlns="http://www.w3.org/2000/svg" height="72" viewBox="0 0 24 24" width="72" fill="#1f97d5"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 14H6v-2h2v2zm0-3H6V9h2v2zm0-3H6V6h2v2zm6 6h-3c-.55 0-1-.45-1-1s.45-1 1-1h3c.55 0 1 .45 1 1s-.45 1-1 1zm3-3h-6c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm0-3h-6c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>
 						
 							<h1 class="fw-black">Scrum</h1>
-						</div>
-					</div>
-
-					<div v-if="tasksWithDetails.length" class="mb-5">
-						<div class="alert alert-secondary alert-sm d-flex align-items-center justify-content-between" role="alert">
-					  		<div>
-				  				You've got {{tasksWithDetails.length}} tasks recorded, you can now copy the notes to use in Microsoft Teams.
-					  		</div>
-						  	<div>
-						    	<button @click="copy" class="btn btn-secondary">Copy Notes</button>
-						  	</div>
 						</div>
 					</div>
 
@@ -311,6 +311,17 @@
 							</div>
 						</div>
 						<div>
+							<div v-if="tasksWithDetails.length" class="mb-3">
+								<div class="alert alert-secondary alert-sm d-flex align-items-center justify-content-between" role="alert">
+							  		<div>
+						  				You've got {{tasksWithDetails.length}} tasks recorded, you can now copy the notes to use in Microsoft Teams.
+							  		</div>
+								  	<div>
+								    	<button @click="copy" class="btn btn-secondary">Copy Notes</button>
+								  	</div>
+								</div>
+							</div>
+
 							<div v-if="!tasks.length" class="border p-3">
 								You have no tasks, create a new one to get started.
 							</div>
@@ -437,7 +448,7 @@
 						</div>
 					</div>
 
-					<div class="my-5 fs-small">
+					<div class="my-5 text-center fs-small">
 						<p class="mb-2">Created with <span class="text-danger">♥</span> by Stuart - <a href="https://github.com/stuartajd/scrum" target="_blank">open source on GitHub</a></p>
 
 						<button @click="setView('minified')" v-if="settings.view === 'full'" class="btn btn-dark btn-sm me-2">View mode: Full</button>
@@ -453,13 +464,18 @@
 		<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue-tippy/dist/vue-tippy.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
+			const APP_VERSION = 1.0;
+			const APP_VERSION_STRING = '1.0';
+
 			var app = new Vue({
 				el: '#app',
 				components: {
 				    draggable: window['vuedraggable'],
-				    tippy: window['tippy']
+				    tippy: window['tippy'],
+				    Swal: window['sweetalert2']
 				},
 				data: {
 					isCreating: false,
@@ -471,10 +487,28 @@
 						capacity: '',
 						lightMode: true,
 						view: 'full',
-						showArchivedTasks: false,
+						showArchivedTasks: false
 					}
 				},
 				mounted: function(){
+					var version = parseInt(this.fetchFromStorage("scrumVersion", APP_VERSION));
+					if(APP_VERSION !== version){
+						Swal.fire({
+						  	title: 'Welcome to Scrum!',
+						  	html: '<strong>Version '+ APP_VERSION_STRING +' - Changelog</strong><br /><br /><ul class="mb-0">' +
+						  		'<li>Introduced this changelog, each version change will include a quick 20 second changelog notice, dismissable at any time.</li>' +
+						  		'<li>Customise tasks further by using the newly added "Expected Hours Today".</li>' +
+						  		'<li>Added a link to <a href="https://github.com/stuartajd/scrum" target="_blank">GitHub</a>, the repo is public and available for issues, suggestions & merge requests!</li></ul>',
+					  		confirmButtonText: "Close",
+					  		customClass: {
+					  			confirmButton: "btn btn-secondary"
+				  			},
+				  			buttonsStyling: false,
+				  			timer: 20000,
+				  			timerProgressBar: true,
+						});
+					}
+
 					var tasks = this.fetchFromStorage("scrumTasks", JSON.stringify([]));
 					this.tasks = JSON.parse(tasks);
 
@@ -492,6 +526,8 @@
 					this.archivedTasks = this.archivedTasks.filter(function(task){
 						return new Date(task.deletedDate) >= deleteBefore;
 					});
+
+					this.sync();
 				},
 				watch: {
 					tasks: function(){
@@ -546,6 +582,7 @@
 						localStorage.setItem('scrumTasks', JSON.stringify(this.tasks));
 						localStorage.setItem('scrumArchivedTasks', JSON.stringify(this.archivedTasks));
 						localStorage.setItem('scrumSettings', JSON.stringify(this.settings));
+						localStorage.setItem('scrumVersion', APP_VERSION);
 					},
 					copy: function() {
 						var range = document.createRange();
