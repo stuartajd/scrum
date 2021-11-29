@@ -107,7 +107,7 @@
 					<br /><br />
 					<strong>Task: {{task.name}}</strong><br />
 					
-					<span v-if="(task.techStatus && task.techStatus.length) || task.status.length" class="whitespace-pre-line">
+					<span v-if="(task.techStatus && task.techStatus.length) || task.status.length">
 						Status:
 						<span v-if="task.techStatus && task.techStatus.length"> [{{task.techStatus}}]</span> 
 						<span v-if="task.status.length">{{task.status}}</span><br />
@@ -129,11 +129,11 @@
 					<br /><br />
 
 					<template v-if="blockedTasks.length">
-						<strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong><br />
+						<strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
 					</template>
 					
 					<template v-if="settings.capacity">
-						<u><strong>Capacity: <span style="text-transform:capitalize">{{settings.capacity}}</span></strong></u>
+						<br /><u><strong>Capacity: <span style="text-transform:capitalize">{{settings.capacity}}</span></strong></u>
 					</template>
 				</template>				
 			</div>
