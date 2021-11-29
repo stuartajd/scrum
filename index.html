@@ -79,10 +79,6 @@
 				border: 1px solid #f52073;
 			}
 
-			.whitespace-pre-line {
-				white-space: pre-line;
-			}
-
 			.spinner {
 				animation: 1.5s ease-in-out infinite spinner;
 			}
@@ -128,14 +124,18 @@
 
 					<i>Blocked: {{(task.blocked) ? 'Yes' : 'No'}}</i>
 				</template>
-				
-				<template v-if="blockedTasks.length">
-					<br /><br /><strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
-				</template>
-				
-				<template v-if="settings.capacity">
-					<br /><u><strong>Capacity: <span style="text-transform:capitalize">{{settings.capacity}}</span></strong></u>
-				</template>
+
+				<template v-if="blockedTasks.length || settings.capacity">
+					<br /><br />
+
+					<template v-if="blockedTasks.length">
+						<strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong><br />
+					</template>
+					
+					<template v-if="settings.capacity">
+						<u><strong>Capacity: <span style="text-transform:capitalize">{{settings.capacity}}</span></strong></u>
+					</template>
+				</template>				
 			</div>
 				
 			<div class="container position-relative">
