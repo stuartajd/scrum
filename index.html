@@ -126,10 +126,10 @@
 				</template>
 
 				<template v-if="blockedTasks.length || settings.capacity">
-					<br /><br />
+					<br />
 
 					<template v-if="blockedTasks.length">
-						<strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
+						<br /><strong>Blocked on {{blockedTasks.length}} task<span v-if="blockedTasks.length > 1">s</span></strong>
 					</template>
 					
 					<template v-if="settings.capacity">
