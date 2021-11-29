@@ -491,7 +491,7 @@
 					}
 				},
 				mounted: function(){
-					var version = parseInt(this.fetchFromStorage("scrumVersion", APP_VERSION));
+					var version = parseInt(this.fetchFromStorage("scrumVersion", 0));
 					if(APP_VERSION !== version){
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
