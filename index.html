@@ -50,7 +50,7 @@
 				color: #eee;
 			}
 
-			.darkMode h2, .darkMode .text-muted, .darkMode .btn-link, .darkMode label, .darkMode .handle, .darkMode svg:not(.ignore-dark-mode) {
+			.darkMode h2, .darkMode .text-muted, .darkMode a, .darkMode .btn-link, .darkMode label, .darkMode .handle, .darkMode svg:not(.ignore-dark-mode) {
 				color:  #eee!important;
 			}
 
@@ -437,14 +437,13 @@
 						</div>
 					</div>
 
-					<div class="text-center my-5 fs-small">
-						<p class="mb-2">Created with <span class="text-danger">♥</span> by Stuart</p>
+					<div class="my-5 fs-small">
+						<p class="mb-2">Created with <span class="text-danger">♥</span> by Stuart - <a href="https://github.com/stuartajd/scrum" target="_blank">open source on GitHub</a></p>
 
-						<button @click="setView('minified')" v-if="settings.view === 'full'" class="btn btn-link fs-small">View mode: Full</button>						
-						<button @click="setView('full')" v-if="settings.view === 'minified'" class="btn btn-link fs-small">View mode: Minified</button>					
-
-						<button @click="clearAllTasks" class="btn btn-link fs-small">Clear All Tasks</button>						
-						<button @click="clearAll" class="btn btn-link fs-small">Reset Everything</button>
+						<button @click="setView('minified')" v-if="settings.view === 'full'" class="btn btn-dark btn-sm me-2">View mode: Full</button>
+						<button @click="setView('full')" v-if="settings.view === 'minified'" class="btn btn-dark btn-sm me-2">View mode: Minified</button>			
+						<button @click="clearAllTasks" class="btn btn-dark btn-sm me-2">Clear Tasks</button>						
+						<button @click="clearAll" class="btn btn-dark btn-sm me-2">Reset Everything</button>
 					</div>
 				</div>
 			</div>
