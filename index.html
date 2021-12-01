@@ -7,7 +7,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="icon" type="image/svg+xml" href="scrum.svg">
 
 		<style>
@@ -190,113 +190,19 @@
 							</div>
 						</div>						
 					</div>
-
-					<div ref="taskEditor">
-						<div v-if="selectedTask" class="border p-3 mb-4">
-							<div>
-								<h2 class="text-muted fw-bold"><template v-if="isCreating">New</template><template v-else>Edit</template> Task</h2>
-							</div>
-
-							<p class="text-muted small">Tasks need to have atleast a name specified to be included in the scrum notes.</p>
-
-							<div>
-								<div class="mb-3">
-								  	<label for="taskName" class="form-label">Task Name</label>
-								  	<input type="text" v-model="selectedTask.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
-								</div>
-								
-								<div class="mb-3">
-								  	<label for="taskStatus" class="form-label">Task Status</label>
-								  	<textarea class="form-control" v-model="selectedTask.status" id="taskStatus" rows="3"></textarea>
-								</div>
-
-								<div class="row gx-3 align-items-start my-3 justify-content-between">
-									<div class="col-6">
-									  	<label for="techStatus" class="form-label">Tech Status</label>
-									  	<select id="techStatus" v-model="selectedTask.techStatus" class="form-select">
-										  	<option value="" selected disabled>Select Tech Status</option>
-											<option value="Awaiting Content">Awaiting Content</option>
-											<option value="Awaiting Brief">Awaiting Brief</option>
-											<option value="Ready to start">Ready to start</option>
-											<option value="Pre-Build Checks">Pre-Build Checks</option>
-											<option value="Blocked">Blocked</option>
-											<option value="On Hold">On Hold</option>
-											<option value="Queued">Queued</option>
-											<option value="At Risk">At Risk</option>
-											<option value="In Progress">In Progress</option>
-											<option value="Ready for QA">Ready for QA</option>
-											<option value="Post QA - development">Post QA - development</option>
-											<option value="With Client">With Client</option>
-											<option value="With Client Team">With Client Team</option>
-											<option value="Signed Off">Signed Off</option>
-											<option value="Complete">Complete</option>
-										</select>
-									</div>
-
-									<div class="col-6">
-										<div class="mb-3">
-										  	<label for="dueDate" class="form-label">Task Due Date</label>
-										  	<input type="date" class="form-control" v-model="selectedTask.dueDate" id="dueDate" />
-										</div>
-									</div>
-								</div>
-								
-								<div class="row gx-3 align-items-start my-3 justify-content-between">
-									<div class="col-6 mb-3">
-										<div>
-											<label for="priority" class="form-label">Task Priority</label>
-										</div>
-
-										<div class="form-check form-check-inline">
-											<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
-											<label class="form-check-label" for="none">Not a Priority</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
-											<label class="form-check-label" for="low">Low</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
-											<label class="form-check-label" for="medium">Medium</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input v-model="selectedTask.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
-											<label class="form-check-label" for="high">High</label>
-										</div>
-									</div>
-
-									<div class="col-6">
-										<div class="mb-3">
-										  	<label for="hours" class="form-label">Expected Hours Today</label>
-										  	<input type="number" class="form-control" v-model="selectedTask.hours" id="hours" />
-										</div>
-									</div>
-								</div>
-								
-								<div class="mb-3">
-								  	<div class="form-check form-switch">
-									  	<input class="form-check-input" v-model="selectedTask.blocked" type="checkbox" role="switch" id="taskBlocked">
-									  	<label class="form-check-label" for="taskBlocked">Is this task blocked?</label>
-									</div>
-								</div>
-							</div>
-
-							<div>
-								<button v-if="!isCreating" @click="remove(selectedTask)" class="btn btn-danger btn-sm">Delete Task</button>
-								<button v-if="!isCreating" @click="close" class="btn btn-success btn-sm">Save Task</button>
-
-								<button v-if="isCreating" @click="remove(selectedTask, true)" class="btn btn-secondary btn-sm">Cancel</button>
-								<button v-if="isCreating" @click="close" class="btn btn-success btn-sm">Create Task</button>
-							</div>
-						</div>	
-					</div>
-										
+		
 
 					<div>
 						<div class="mb-3 d-flex align-items-center justify-content-between">
 							<h2 class="text-muted fw-bold mb-0">Your Tasks</h2>
 
 							<div>
+								<button @click="sort('blocked')" class="btn btn-sm btn-secondary me-2">
+									<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
+
+									Sort by Blocked Status
+								</button>
+
 								<button @click="sort('priority')" class="btn btn-sm btn-secondary me-2">
 									<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
 
@@ -327,7 +233,102 @@
 							</div>
 							<draggable v-if="tasks.length" v-model="tasks" handle=".handle" class="mb-3">
 								<div v-for="(task, index) in tasks" :key="task.uid" class="card" :class="{ 'mb-3': settings.view === 'full' }">
-									<div class="d-flex justify-content-start align-items-stretch">
+									<div v-if="task.isEditing" class="p-3">
+										<div>
+											<h2 class="text-muted fw-bold">Edit Task</h2>
+										</div>
+
+										<p class="text-muted small">Tasks need to have atleast a name specified to be included in the scrum notes.</p>
+
+										<div>
+											<div class="mb-3">
+											  	<label for="taskName" class="form-label">Task Name</label>
+											  	<input type="text" v-model="task.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
+											</div>
+											
+											<div class="mb-3">
+											  	<label for="taskStatus" class="form-label">Task Status</label>
+											  	<textarea class="form-control" v-model="task.status" id="taskStatus" rows="3"></textarea>
+											</div>
+
+											<div class="row gx-3 align-items-start my-3 justify-content-between">
+												<div class="col-6">
+												  	<label for="techStatus" class="form-label">Tech Status</label>
+												  	<select id="techStatus" v-model="task.techStatus" class="form-select">
+													  	<option value="" selected disabled>Select Tech Status</option>
+														<option value="Awaiting Content">Awaiting Content</option>
+														<option value="Awaiting Brief">Awaiting Brief</option>
+														<option value="Ready to start">Ready to start</option>
+														<option value="Pre-Build Checks">Pre-Build Checks</option>
+														<option value="Blocked">Blocked</option>
+														<option value="On Hold">On Hold</option>
+														<option value="Queued">Queued</option>
+														<option value="At Risk">At Risk</option>
+														<option value="In Progress">In Progress</option>
+														<option value="Ready for QA">Ready for QA</option>
+														<option value="Post QA - development">Post QA - development</option>
+														<option value="With Client">With Client</option>
+														<option value="With Client Team">With Client Team</option>
+														<option value="Signed Off">Signed Off</option>
+														<option value="Complete">Complete</option>
+													</select>
+												</div>
+
+												<div class="col-6">
+													<div class="mb-3">
+													  	<label for="dueDate" class="form-label">Task Due Date</label>
+													  	<input type="date" class="form-control" v-model="task.dueDate" id="dueDate" />
+													</div>
+												</div>
+											</div>
+											
+											<div class="row gx-3 align-items-start my-3 justify-content-between">
+												<div class="col-6 mb-3">
+													<div>
+														<label for="priority" class="form-label">Task Priority</label>
+													</div>
+
+													<div class="form-check form-check-inline">
+														<input v-model="task.priority" class="form-check-input" type="radio" name="priority" id="none" value="">
+														<label class="form-check-label" for="none">Not a Priority</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input v-model="task.priority" class="form-check-input" type="radio" name="priority" id="low" value="low">
+														<label class="form-check-label" for="low">Low</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input v-model="task.priority" class="form-check-input" type="radio" name="priority" id="medium" value="medium">
+														<label class="form-check-label" for="medium">Medium</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input v-model="task.priority" class="form-check-input" type="radio" name="priority" id="high" value="high">
+														<label class="form-check-label" for="high">High</label>
+													</div>
+												</div>
+
+												<div class="col-6">
+													<div class="mb-3">
+													  	<label for="hours" class="form-label">Expected Hours Today</label>
+													  	<input type="number" class="form-control" v-model="task.hours" id="hours" />
+													</div>
+												</div>
+											</div>
+											
+											<div class="mb-3">
+											  	<div class="form-check form-switch">
+												  	<input class="form-check-input" v-model="task.blocked" type="checkbox" role="switch" id="taskBlocked">
+												  	<label class="form-check-label" for="taskBlocked">Is this task blocked?</label>
+												</div>
+											</div>
+										</div>
+
+										<div>
+											<button @click="remove(task)" class="btn btn-danger btn-sm">Delete Task</button>
+											<button @click="close(task)" class="btn btn-success btn-sm">Save Task</button>
+										</div>
+									</div>	
+
+									<div v-if="!task.isEditing" class="d-flex justify-content-start align-items-stretch">
 										<div class="p-3 d-flex align-items-center handle cursor-pointer">
 											<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
 										</div>
@@ -467,8 +468,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = 1.0;
-			const APP_VERSION_STRING = '1.0';
+			const APP_VERSION = "1.1";
 
 			var app = new Vue({
 				el: '#app',
@@ -478,8 +478,6 @@
 				    Swal: window['sweetalert2']
 				},
 				data: {
-					isCreating: false,
-					selectedTask: null,
 					tasks: [],
 					archivedTasks: [],
 					settings: {
@@ -491,18 +489,19 @@
 					}
 				},
 				mounted: function(){
-					var version = parseInt(this.fetchFromStorage("scrumVersion", 0));
+					var version = this.fetchFromStorage("scrumVersion", "1.0");
 					if(APP_VERSION !== version){
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
-						  	html: '<strong>Version '+ APP_VERSION_STRING +' - Changelog</strong><br /><br /><ul class="mb-0">' +
-						  		'<li>Introduced this changelog, each version change will include a quick 20 second changelog notice, dismissable at any time.</li>' +
-						  		'<li>Customise tasks further by using the newly added "Expected Hours Today".</li>' +
-						  		'<li>Added a link to <a href="https://github.com/stuartajd/scrum" target="_blank">GitHub</a>, the repo is public and available for issues, suggestions & merge requests!</li></ul>',
+						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
+						  		'<li>Updated to show the edit screen in place of the tasks instead of a form at the top, will make it easier for people to update their long task lists</li>' +
+						  		'<li>Added new tasks to the start of the tasks list</li>' +
+						  		'</ul><p>Join in the development, view the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
 					  			confirmButton: "btn btn-secondary"
 				  			},
+				  			allowOutsideClick: false,
 				  			buttonsStyling: false,
 				  			timer: 20000,
 				  			timerProgressBar: true,
@@ -567,7 +566,8 @@
 					sort: function(sortField){
 						this.tasks = this.tasks.sort(function(a, b){
 							var sortFlags = {
-								priority: ['high', 'medium', 'low', '']
+								priority: ['high', 'medium', 'low', ''],
+								blocked: [true, false]
 							}
 
 							if(!a[sortField]) return 1;
@@ -593,7 +593,6 @@
 				        window.getSelection().removeAllRanges();
 					},
 					create: function() {
-						this.isCreating = true;
 						var task = {
 							uid: Date.now().toString(36) + Math.random().toString(36).substr(2),
 							name: '',
@@ -603,24 +602,21 @@
 							dueDate: '',
 							hours: 0,
 							createdDate: Date.now(),
-							blocked: false
+							blocked: false,
+							isEditing: true
 						};
 					
-						this.tasks.push(task);
-						this.selectedTask = task;
-						this.$refs.taskEditor.scrollIntoView(true);						
+						this.tasks.unshift(task);
+						this.edit(task);
 					},
 					edit: function(task){
-						this.isCreating = false;
-						this.selectedTask = task;
-						console.log(this.$refs);
-						this.$refs.taskEditor.scrollIntoView(true);
+						this.$set(task, 'isEditing', true);
+					},
+					close: function(task){
+						this.$set(task, 'isEditing', false);
+						this.sync();
 					},
 					remove: function(task, force){
-						if(this.selectedTask !== null && task.uid === this.selectedTask.uid){
-							this.selectedTask = null;
-						}
-
 						if(!force){ 
 							task.deletedDate = Date.now();
 							this.archivedTasks.push(task);
@@ -645,11 +641,6 @@
 						this.settings.name = "";
 						this.settings.capacity = "";
 						this.clearAllTasks();
-					},
-					close: function(){
-						this.selectedTask = null;
-						this.isCreating = false;
-						this.sync();
 					}
 				}
 			})
