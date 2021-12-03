@@ -173,7 +173,7 @@
 						<h2 class="text-muted fw-bold mb-3">Your Status</h2>
 
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-6 mb-3 mb-sm-0">
 								<label for="personName" class="form-label">Your Name</label>
 								<input @change="sync" type="text" v-model="settings.name" class="form-control" id="personName" placeholder="Joe Bloggs">
 							</div>
@@ -192,11 +192,11 @@
 					</div>
 		
 					<div>
-						<div class="mb-3 d-flex align-items-center justify-content-between">
-							<h2 class="text-muted fw-bold mb-0">Your Tasks</h2>
+						<div class="mb-3 d-flex align-items-center justify-content-between flex-column flex-sm-row">
+							<h2 class="text-muted fw-bold mb-3 mb-sm-0">Your Tasks</h2>
 
 							<div>
-								<div class="btn-group" role="group" aria-label="Basic example">
+								<div class="btn-group mb-3 mb-sm-0" role="group" aria-label="Basic example">
 									<button class="btn btn-sm btn-secondary" disabled>
 										Sort
 									</button>
@@ -342,7 +342,7 @@
 
 												<div v-if="task.status" class="fs-small mt-2 whitespace-pre-line">{{task.status}}</div>
 
-												<div v-if="settings.view === 'full'" class="darker mt-2 fs-small d-flex align-items-center justify-content-start">
+												<div v-if="settings.view === 'full'" class="darker mt-2 fs-small d-flex align-items-start flex-sm-row align-items-sm-center flex-column justify-content-start">
 													<span v-if="task.priority" content="Task Priority" v-tippy="{ arrow: true }">
 														<span v-if="task.priority === 'high'" class="me-4 colour-red">
 															<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><g><rect fill="none" height="24" width="24"/></g><g><g><polygon points="6,17.59 7.41,19 12,14.42 16.59,19 18,17.59 12,11.59"/><polygon points="6,11 7.41,12.41 12,7.83 16.59,12.41 18,11 12,5"/></g></g></svg>
@@ -455,10 +455,12 @@
 					<div class="my-5 text-center fs-small">
 						<p class="mb-2">Created with <span class="text-danger">♥</span> by Stuart - <a href="https://github.com/stuartajd/scrum" target="_blank">open source on GitHub</a></p>
 
-						<button @click="setView('minified')" v-if="settings.view === 'full'" class="btn btn-dark btn-sm me-2">View mode: Full</button>
-						<button @click="setView('full')" v-if="settings.view === 'minified'" class="btn btn-dark btn-sm me-2">View mode: Minified</button>			
-						<button @click="clearAllTasks" class="btn btn-dark btn-sm me-2">Clear Tasks</button>						
-						<button @click="clearAll" class="btn btn-dark btn-sm me-2">Reset Everything</button>
+						<div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+							<button @click="setView('minified')" v-if="settings.view === 'full'" class="btn btn-dark btn-sm me-2 mb-3 mb-sm-0">View mode: Full</button>
+							<button @click="setView('full')" v-if="settings.view === 'minified'" class="btn btn-dark btn-sm me-2 mb-3 mb-sm-0">View mode: Minified</button>			
+							<button @click="clearAllTasks" class="btn btn-dark btn-sm me-2 mb-3 mb-sm-0">Clear Tasks</button>						
+							<button @click="clearAll" class="btn btn-dark btn-sm me-2 mb-3 mb-sm-0">Reset Everything</button>
+						</div>
 					</div>
 				</div>
 			</div>
