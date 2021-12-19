@@ -485,6 +485,7 @@
 				data: {
 					tasks: [],
 					archivedTasks: [],
+					todaysDate: null,
 					settings: {
 						name: '',
 						capacity: '',
@@ -547,15 +548,15 @@
 					},
 					blockedTasks: function(){
 						return this.tasks.filter(function(task) { return task.blocked });
-					},
-					todaysDate: function(){
-						var date = new Date();
-						return ('0' + date.getDate()).slice(-2) + '/'
-             					+ ('0' + (date.getMonth()+1)).slice(-2) + '/'
-             					+ date.getFullYear();
 					}
 				},
 				methods: {
+					setTodaysDate: function(){
+						var date = new Date();
+						this.todaysDate = ('0' + date.getDate()).slice(-2) + '/'
+             					+ ('0' + (date.getMonth()+1)).slice(-2) + '/'
+             					+ date.getFullYear();
+					},
 					setView: function(viewMode) {
 						this.settings.view = viewMode;
 						this.sync();
@@ -590,12 +591,14 @@
 						localStorage.setItem('scrumVersion', APP_VERSION);
 					},
 					copy: function() {
+						this.setTodaysDate();
+						
 						var range = document.createRange();
-				        range.selectNode(this.$refs.taskNotes);
-				        window.getSelection().removeAllRanges();
-				        window.getSelection().addRange(range);
-				        document.execCommand("copy");
-				        window.getSelection().removeAllRanges();
+				        	range.selectNode(this.$refs.taskNotes);
+				        	window.getSelection().removeAllRanges();
+				        	window.getSelection().addRange(range);
+				        	document.execCommand("copy");
+				        	window.getSelection().removeAllRanges();
 					},
 					create: function() {
 						var task = {
