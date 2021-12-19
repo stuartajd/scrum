@@ -531,6 +531,9 @@
 					this.archivedTasks = this.archivedTasks.filter(function(task){
 						return new Date(task.deletedDate) >= deleteBefore;
 					});
+					
+					// Update the date on launch & then continue to update 30 minutes.
+					this.setTodaysDate();
 
 					this.sync();
 				},
@@ -593,12 +596,15 @@
 					copy: function() {
 						this.setTodaysDate();
 						
-						var range = document.createRange();
-				        	range.selectNode(this.$refs.taskNotes);
-				        	window.getSelection().removeAllRanges();
-				        	window.getSelection().addRange(range);
-				        	document.execCommand("copy");
-				        	window.getSelection().removeAllRanges();
+						this.$nextTick(function () {
+							var range = document.createRange();
+							range.selectNode(this.$refs.taskNotes);
+							window.getSelection().removeAllRanges();
+							window.getSelection().addRange(range);
+							document.execCommand("copy");
+							window.getSelection().removeAllRanges();
+						});
+						
 					},
 					create: function() {
 						var task = {
