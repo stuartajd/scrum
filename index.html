@@ -116,7 +116,7 @@
 				
 				<template v-for="task in tasksWithDetails">
 					<br /><br />
-					<strong>Task: {{task.name}}</strong><br />
+					<strong>Task: {{task.name}} <template v-if="task.link">[<a :href="task.link" target="_blank">Task Link</a>]</template></strong><br />
 					
 					<span v-if="(task.techStatus && task.techStatus.length) || task.status.length">
 						Status:
@@ -246,7 +246,12 @@
 										<div>
 											<div class="mb-3">
 											  	<label for="taskName" class="form-label">Task Name</label>
-											  	<input type="text" v-model="task.name" class="form-control" id="taskName" placeholder="Example Project or https://eu1.clarizen.com/Clarizen/Task/.....">
+											  	<input type="text" v-model="task.name" class="form-control" id="taskName" placeholder="Example Project">
+											</div>
+
+											<div class="mb-3">
+											  	<label for="taskLink" class="form-label">Task Link</label>
+											  	<input type="text" v-model="task.link" class="form-control" id="taskLink" placeholder="https://eu1.clarizen.com/Clarizen/Task/.....">
 											</div>
 											
 											<div class="mb-3">
@@ -392,6 +397,10 @@
 										</div>
 										<div class="flex-shrink-0 align-self-center me-3">
 											<div class="d-flex align-items-center flex-grow-1">
+												<a v-if="task.link" :href="task.link" target="_blank" class="me-2">
+													<svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+												</a>
+
 												<div @click="edit(task)" class="me-2">
 													<svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 												</div>
@@ -473,7 +482,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = "1.1";
+			const APP_VERSION = "1.2";
 
 			var app = new Vue({
 				el: '#app',
@@ -499,8 +508,7 @@
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
 						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
-						  		'<li>Updated to show the edit screen in place of the tasks instead of a form at the top, will make it easier for people to update their long task lists</li>' +
-						  		'<li>Added new tasks to the start of the tasks list</li>' +
+						  		'<li>Added in links to specific tasks, these will be clickable on the output but also via the small link icon on the right hand side of each task.</li>' +
 						  		'</ul><p>Join in the development, view the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
@@ -601,6 +609,7 @@
 						var task = {
 							uid: Date.now().toString(36) + Math.random().toString(36).substr(2),
 							name: '',
+							link: '',
 							status: '',
 							techStatus: '',
 							priority: '',
