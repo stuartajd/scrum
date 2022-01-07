@@ -556,7 +556,7 @@
 				},
 				computed: {
 					taskTotalHours: function(){
-						return this.tasks.reduce(function(acc, task) { return acc + parseFloat(task.hours) }, 0);
+						return this.tasks.reduce(function(acc, task) { return acc + parseFloat(task.hours || 0) }, 0);
 					},
 					taskEstimatedCapacity: function() {
 						if(this.taskTotalHours <= 3) return 'Light';
