@@ -556,7 +556,10 @@
 				},
 				computed: {
 					taskTotalHours: function(){
-						return this.tasks.reduce(function(acc, task) { return acc + parseFloat(task.hours || 0) }, 0);
+						// Total time for all unblocked tasks
+						return this.tasks
+							.filter(function(task) { return !task.blocked; })
+							.reduce(function(acc, task) { return acc + parseFloat(task.hours || 0) }, 0);
 					},
 					taskEstimatedCapacity: function() {
 						if(this.taskTotalHours <= 3) return 'Light';
