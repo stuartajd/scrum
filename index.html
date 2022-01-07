@@ -223,7 +223,8 @@
 							<div v-if="tasksWithDetails.length" class="mb-3">
 								<div class="alert alert-secondary alert-sm d-flex align-items-center justify-content-between" role="alert">
 							  		<div>
-						  				You've got {{tasksWithDetails.length}} tasks recorded, you can now copy the notes to use in Microsoft Teams.
+						  				You've got <strong>{{tasksWithDetails.length}} tasks</strong> recorded, you can now copy the notes to use in Microsoft Teams.<br />
+						  				<small v-if="taskTotalHours > 0">Estimating <strong>{{taskTotalHours}} hours</strong> of work, your recommended capacity today is <strong>{{taskEstimatedCapacity}}</strong>.</small>
 							  		</div>
 								  	<div>
 								    	<button @click="copy" class="btn btn-secondary">Copy Notes</button>
@@ -482,7 +483,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = "1.2";
+			const APP_VERSION = "1.3";
 
 			var app = new Vue({
 				el: '#app',
@@ -509,7 +510,7 @@
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
 						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
-						  		'<li>Added in links to specific tasks, these will be clickable on the output but also via the small link icon on the right hand side of each task.</li>' +
+						  		'<li>Added in total estimated hours and recommended capacity.</li>' +
 						  		'</ul><p>Join in the development, view the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
@@ -554,6 +555,16 @@
 					}
 				},
 				computed: {
+					taskTotalHours: function(){
+						return this.tasks.reduce(function(acc, task) { return acc + parseFloat(task.hours) }, 0);
+					},
+					taskEstimatedCapacity: function() {
+						if(this.taskTotalHours <= 3) return 'Light';
+						if(this.taskTotalHours <= 5) return 'Medium';
+						if(this.taskTotalHours < 7.5) return 'Busy';
+						if(this.taskTotalHours == 7.5) return 'Full';
+						return 'Overloaded';
+					},
 					tasksWithDetails: function(){
 						return this.tasks.filter(function(task) { return task.name.trim().length });
 					},
