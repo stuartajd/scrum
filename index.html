@@ -50,6 +50,10 @@
 				color: #eee;
 			}
 
+			.darkMode .input-group-text {
+				background-color: #5e5e5e;
+			}
+
 			.darkMode h2, .darkMode .text-muted, .darkMode a, .darkMode .btn-link, .darkMode label, .darkMode .handle, .darkMode svg:not(.ignore-dark-mode) {
 				color:  #eee!important;
 			}
@@ -260,6 +264,25 @@
 											  	<textarea class="form-control" v-model="task.status" id="taskStatus" rows="3"></textarea>
 											</div>
 
+											<div class="mb-3">
+											  	<label for="taskStatus" class="form-label">Task Breakdown</label>
+											  	
+											  	<div>
+											  		<div class="mb-3 fs-small" v-if="!task.breakdown || !task.breakdown.length">Break this task down into smaller, more managable subtasks to make it clearer where you need to go next - these do not get included in the daily notes.</div>
+											  		<div v-for="(breakdown, index) in task.breakdown" class="input-group mb-3">
+														<div class="input-group-text">
+															<input class="form-check-input mt-0" type="checkbox" v-model="breakdown.done">
+														</div>
+														<input type="text" class="fs-small form-control" @change="sync" v-model="breakdown.note">
+														<span class="input-group-text">
+															<svg @click="removeBreakdown(task, index)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v10zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+														</span>
+													</div>
+											  	</div>
+
+												<button @click="addBreakdown(task)" type="button" class="btn btn-primary btn-sm">Add</button>
+											</div>
+
 											<div class="row gx-3 align-items-start my-3 justify-content-between">
 												<div class="col-6">
 												  	<label for="techStatus" class="form-label">Tech Status</label>
@@ -350,6 +373,19 @@
 
 												<div v-if="task.status" class="fs-small mt-2 whitespace-pre-line">{{task.status}}</div>
 
+												<div v-if="task.breakdown && task.breakdown.length" class="fs-small mt-2">
+													<div v-for="breakdown in task.breakdown">
+														<span v-if="breakdown.done">
+															<svg @click="markBreakdown(breakdown, false)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+														</span>
+														<span v-if="!breakdown.done">
+															<svg @click="markBreakdown(breakdown, true)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+														</span>
+
+														{{breakdown.note}}
+													</div>
+												</div>
+
 												<div v-if="settings.view === 'full'" class="darker mt-2 fs-small d-flex align-items-start flex-sm-row align-items-sm-center flex-column justify-content-start">
 													<span v-if="task.priority" content="Task Priority" v-tippy="{ arrow: true }">
 														<span v-if="task.priority === 'high'" class="me-4 colour-red">
@@ -403,7 +439,6 @@
 												<a v-if="task.link" :href="task.link" target="_blank" class="me-2">
 													<svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
 												</a>
-
 												<div @click="edit(task)" class="me-2">
 													<svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 												</div>
@@ -485,7 +520,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = "1.4";
+			const APP_VERSION = "1.5";
 
 			var app = new Vue({
 				el: '#app',
@@ -512,7 +547,7 @@
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
 						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
-						  		'<li>Added new tech statuses for Client Meeting & Internal Meeting.</li>' +
+						  		'<li>You now have the ability to breakdown tasks into smaller subtasks. Mark when each subtask is completed to keep track of where you go next. These do not get put within the task notes.</li>' +
 						  		'</ul><p>Join in the development, view the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
@@ -645,6 +680,7 @@
 							dueDate: '',
 							hours: 0,
 							createdDate: Date.now(),
+							breakdown: [],
 							blocked: false,
 							isEditing: true
 						};
@@ -654,6 +690,19 @@
 					},
 					edit: function(task){
 						this.$set(task, 'isEditing', true);
+					},
+					addBreakdown: function(task){
+						var breakdown = task.breakdown || [];
+						breakdown.push({ done: false, note: "" });
+						this.$set(task, 'breakdown', breakdown);
+						this.sync();
+					},
+					removeBreakdown: function(task, index){
+						task.breakdown.splice(index, 1);
+					},
+					markBreakdown: function(breakdown, status){
+						breakdown.done = status;
+						this.sync();
 					},
 					close: function(task){
 						this.$set(task, 'isEditing', false);
