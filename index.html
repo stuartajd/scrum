@@ -250,7 +250,7 @@
 							<div v-if="!tasks.length" class="border p-3">
 								You have no tasks, create a new one to get started.
 							</div>
-							<draggable v-if="tasks.length" v-model="tasks" handle=".handle" class="mb-3" :animation="200">
+							<draggable v-if="tasks.length" v-model="tasks" handle=".handle" class="mb-3" animation="200">
 								<div v-for="(task, index) in tasks" :key="task.uid" class="card" :class="{ 'mb-3': settings.view === 'full' }">
 									<div v-if="task.isEditing" class="p-3">
 										<div>
