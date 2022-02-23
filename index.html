@@ -117,6 +117,14 @@
 			.darkMode .bg-darken {
 				background-color: #2f2f2f
 			}
+
+			.btn-primary, .btn-primary:focus, .btn-primary:active {
+				background-color:  #1f97d5;
+				border: 0;
+			}
+			.form-check-input:checked, .form-check-input:checked:focus, .form-check-input:checked:active {
+				background-color: #1f97d5!important;
+			}
 		</style>
 	</head>
 	<body>
@@ -148,7 +156,7 @@
 						Priority: {{task.priority}}<br />
 					</span>
 
-					<i>Blocked: {{(task.blocked) ? 'Yes' : 'No'}}</i>
+					<i>Blocked: {{(task.blocked) ? 'Yes' : 'No'}} <template v-if="task.blocked_reason">- Reason: {{task.blocked_reason}}</template></i>
 				</template>
 
 				<template v-if="blockedTasks.length || settings.capacity">
@@ -183,7 +191,6 @@
 							<h1 class="fw-black">Scrum</h1>
 						</div>
 					</div>
-
 					<div class="mb-5">
 						<h2 class="text-muted fw-bold mb-3">Your Status</h2>
 
@@ -261,42 +268,23 @@
 
 										<div>
 											<div class="mb-3">
-											  	<label for="taskName" class="form-label">Task Name</label>
+											  	<label for="taskName" class="form-label fw-bold">Task Name</label>
 											  	<input type="text" v-model="task.name" class="form-control" id="taskName" placeholder="Example Project">
 											</div>
 
 											<div class="mb-3">
-											  	<label for="taskLink" class="form-label">Task Link</label>
+											  	<label for="taskLink" class="form-label fw-bold">Task Link</label>
 											  	<input type="text" v-model="task.link" class="form-control" id="taskLink" placeholder="https://eu1.clarizen.com/Clarizen/Task/.....">
 											</div>
 											
 											<div class="mb-3">
-											  	<label for="taskStatus" class="form-label">Task Status</label>
-											  	<textarea class="form-control" v-model="task.status" id="taskStatus" rows="3"></textarea>
+											  	<label for="taskStatus" class="form-label fw-bold">Task Status</label>
+											  	<textarea class="form-control" v-model="task.status" id="taskStatus" rows="2"></textarea>
 											</div>
 
-											<div class="mb-3">
-											  	<label for="taskStatus" class="form-label">Task Breakdown</label>
-											  	
-											  	<div>
-											  		<div class="mb-3 fs-small" v-if="!task.breakdown || !task.breakdown.length">Break this task down into smaller, more managable subtasks to make it clearer where you need to go next - these do not get included in the daily notes.</div>
-											  		<div v-for="(breakdown, index) in task.breakdown" class="input-group mb-3">
-														<div class="input-group-text">
-															<input class="form-check-input mt-0" type="checkbox" v-model="breakdown.done">
-														</div>
-														<input type="text" class="fs-small form-control" @change="sync" v-model="breakdown.note">
-														<span class="input-group-text">
-															<svg @click="removeBreakdown(task, index)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v10zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
-														</span>
-													</div>
-											  	</div>
-
-												<button @click="addBreakdown(task)" type="button" class="btn btn-primary btn-sm">Add</button>
-											</div>
-
-											<div class="row gx-3 align-items-start my-3 justify-content-between">
+											<div class="row gx-3 align-items-start mb-3 justify-content-between">
 												<div class="col-6">
-												  	<label for="techStatus" class="form-label">Tech Status</label>
+												  	<label for="techStatus" class="form-label fw-bold">Tech Status</label>
 												  	<select id="techStatus" v-model="task.techStatus" class="form-select">
 													  	<option value="" selected disabled>Select Tech Status</option>
 														<option value="Client Meeting">Client Meeting</option>
@@ -320,17 +308,17 @@
 												</div>
 
 												<div class="col-6">
-													<div class="mb-3">
-													  	<label for="dueDate" class="form-label">Task Due Date</label>
+													<div>
+													  	<label for="dueDate" class="form-label fw-bold">Task Due Date</label>
 													  	<input type="date" class="form-control" v-model="task.dueDate" id="dueDate" />
 													</div>
 												</div>
 											</div>
 											
-											<div class="row gx-3 align-items-start my-3 justify-content-between">
-												<div class="col-6 mb-3">
+											<div class="row gx-3 align-items-start mb-3 justify-content-between">
+												<div class="col-6">
 													<div>
-														<label for="priority" class="form-label">Task Priority</label>
+														<label for="priority" class="form-label fw-bold">Task Priority</label>
 													</div>
 
 													<div class="form-check form-check-inline">
@@ -352,19 +340,55 @@
 												</div>
 
 												<div class="col-6">
-													<div class="mb-3">
-													  	<label for="hours" class="form-label">Expected Hours Today</label>
+													<div>
+													  	<label for="hours" class="form-label fw-bold">Expected Hours Today</label>
 													  	<input type="number" class="form-control" v-model="task.hours" id="hours" />
 													</div>
 												</div>
 											</div>
 											
-											<div class="mb-3">
-											  	<div class="form-check form-switch">
-												  	<input class="form-check-input" v-model="task.blocked" type="checkbox" role="switch" id="taskBlocked">
-												  	<label class="form-check-label" for="taskBlocked">Is this task blocked?</label>
+											<div>
+												<div>
+													<div class="mb-3">
+													  	<label for="taskBlocked" class="form-label fw-bold">Is this task blocked?</label>
+
+													  	<div class="form-check form-switch">
+														  	<input class="form-check-input" v-model="task.blocked" type="checkbox" role="switch" id="taskBlocked">
+														  	<label class="form-check-label" for="taskBlocked">
+														  		{{(task.blocked) ? 'Task is blocked' : 'Task is not blocked'}}
+														  	</label>
+														</div>
+													</div>
 												</div>
-											</div>
+												<div v-if="task.blocked">
+													<div class="mb-3">
+													  	<label for="blocked_reason" class="form-label fw-bold">Blocked Reason</label>
+													  	<input type="text" placeholder="Why is this task blocked?" class="form-control" v-model="task.blocked_reason" id="blocked_reason" />
+													</div>
+												</div>
+											</div>										
+
+											<details class="mb-3" :open="task.breakdown && task.breakdown.length">
+											  	<summary>
+													<label for="taskBreakdown" class="form-label fw-bold">Task Breakdown</label>
+													<div class="fs-small" v-if="!task.breakdown || !task.breakdown.length">Break this task down into smaller, more managable subtasks to make it clearer where you need to go next - these do not get included in the daily notes.</div>
+											  	</summary>
+											  	<div class="mt-3">
+											  		<div>
+												  		<div v-for="(breakdown, index) in task.breakdown" class="input-group mb-3">
+															<div class="input-group-text">
+																<input class="form-check-input mt-0" type="checkbox" v-model="breakdown.done">
+															</div>
+															<input type="text" class="fs-small form-control" @change="sync" v-model="breakdown.note">
+															<span class="input-group-text">
+																<svg @click="removeBreakdown(task, index)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v10zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+															</span>
+														</div>
+												  	</div>
+
+													<button @click="addBreakdown(task)" type="button" class="btn btn-primary btn-sm">Add</button>
+											  	</div>
+											</details>
 										</div>
 
 										<div>
@@ -428,7 +452,7 @@
 														Not Blocked
 													</span>
 
-													<span class="me-4 colour-red" v-if="task.blocked" content="Blocked Status" v-tippy="{ arrow: true }">
+													<span class="me-4 colour-red" v-if="task.blocked" :content="'Blocked' + (task.blocked_reason ? ' with reason: '+ task.blocked_reason : '')" v-tippy="{ arrow: true }">
 														<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor" class="ignore-dark-mode"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
 														Blocked
 													</span>
@@ -546,7 +570,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = "1.6";
+			const APP_VERSION = "1.7";
 
 			var app = new Vue({
 				el: '#app',
@@ -573,7 +597,8 @@
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
 						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
-						  		'<li>You can now hide tasks from the notes output by just toggling the visibility using the eye icon.</li>' +
+						  		'<li>Added a blocked reason field that is displayed when a task is blocked, this will be visible on notes when a task is set to blocked.</li>' +
+						  		'<li>Fixed an issue where removing a breakdown item wouldn\'t trigger a save.</li>' +
 						  		'</ul><p>Suggestion? Question? Problem? View the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
@@ -603,7 +628,7 @@
 					this.archivedTasks = this.archivedTasks.filter(function(task){
 						return new Date(task.deletedDate) >= deleteBefore;
 					});
-					
+
 					// Update the date on launch & then continue to update 30 minutes.
 					this.setTodaysDate();
 
@@ -708,6 +733,7 @@
 							createdDate: Date.now(),
 							breakdown: [],
 							blocked: false,
+							blocked_reason: null,
 							isEditing: true,
 							isHidden: false
 						};
@@ -720,6 +746,7 @@
 					},
 					hide: function(task){
 						this.$set(task, 'isHidden', !task.isHidden);
+						this.sync();
 					},
 					addBreakdown: function(task){
 						var breakdown = task.breakdown || [];
@@ -729,6 +756,7 @@
 					},
 					removeBreakdown: function(task, index){
 						task.breakdown.splice(index, 1);
+						this.sync();
 					},
 					markBreakdown: function(breakdown, status){
 						breakdown.done = status;
