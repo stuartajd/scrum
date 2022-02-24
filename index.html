@@ -368,7 +368,7 @@
 												</div>
 											</div>										
 
-											<details class="mb-3" :open="task.breakdown && task.breakdown.length">
+											<details class="mb-3" :open="task.breakdown && task.breakdown.length !== 0">
 											  	<summary>
 													<label for="taskBreakdown" class="form-label fw-bold">Task Breakdown</label>
 													<div class="fs-small" v-if="!task.breakdown || !task.breakdown.length">Break this task down into smaller, more managable subtasks to make it clearer where you need to go next - these do not get included in the daily notes.</div>
