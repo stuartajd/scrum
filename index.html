@@ -570,7 +570,7 @@
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			const APP_VERSION = "1.7";
+			const APP_VERSION = "1.8";
 
 			var app = new Vue({
 				el: '#app',
@@ -597,8 +597,7 @@
 						Swal.fire({
 						  	title: 'Welcome to Scrum!',
 						  	html: '<strong>Version '+ APP_VERSION +' - Changelog</strong><br /><br /><ul>' +
-						  		'<li>Added a blocked reason field that is displayed when a task is blocked, this will be visible on notes when a task is set to blocked.</li>' +
-						  		'<li>Fixed an issue where removing a breakdown item wouldn\'t trigger a save.</li>' +
+						  		'<li>Added strike-through to completed task breakdown items, thanks <a href="https://github.com/stuartajd/scrum/pull/7" target="_blank">@peep24</a></li>' +
 						  		'</ul><p>Suggestion? Question? Problem? View the project on <a href="https://www.github.com/stuartajd/scrum" target="_blank">GitHub</a>',
 					  		confirmButtonText: "Close",
 					  		customClass: {
