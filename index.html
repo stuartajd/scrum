@@ -156,7 +156,7 @@
 						Priority: {{task.priority}}<br />
 					</span>
 
-					<i>Blocked: {{(task.blocked) ? 'Yes' : 'No'}} <template v-if="task.blocked_reason">- Reason: {{task.blocked_reason}}</template></i>
+					<i>Blocked: {{(task.blocked) ? 'Yes' : 'No'}} <template v-if="task.blocked && task.blocked_reason">- Reason: {{task.blocked_reason}}</template></i>
 				</template>
 
 				<template v-if="blockedTasks.length || settings.capacity">
