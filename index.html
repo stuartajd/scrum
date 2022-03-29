@@ -774,6 +774,7 @@
 					},
 					hide: function(task){
 						this.$set(task, 'isHidden', !task.isHidden);
+						this.$set(task, 'updatedDate', Date.now());
 						this.sync();
 					},
 					addBreakdown: function(task){
@@ -785,6 +786,7 @@
 					},
 					removeBreakdown: function(task, index){
 						task.breakdown.splice(index, 1);
+						this.$set(task, 'updatedDate', Date.now());
 						this.sync();
 					},
 					markBreakdown: function(breakdown, status){
@@ -799,6 +801,7 @@
 					remove: function(task, force){
 						if(!force){ 
 							task.deletedDate = Date.now();
+							this.$set(task, 'updatedDate', Date.now());
 							this.archivedTasks.push(task);
 						}
 
@@ -810,6 +813,7 @@
 					},
 					restore: function(task){
 						this.tasks.push(task);
+						this.$set(task, 'updatedDate', Date.now());
 						this.archivedTasks = this.archivedTasks.filter(function(t) { return t.uid !== task.uid });
 					},
 					clearAllTasks: function(){
