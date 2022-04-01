@@ -652,8 +652,10 @@
 
 					// Go through all tasks and apply latest updates.
 					this.tasks.forEach(function(task){
-						// 1.9 - Added in updatedDate to each task.
-						task.updatedDate = Date.now();
+						if(!task.updatedDate){
+							// 1.9 - Added in updatedDate to each task.
+							task.updatedDate = Date.now();
+						}		
 					});
 
 					// Update the date on launch & then continue to update 30 minutes.
