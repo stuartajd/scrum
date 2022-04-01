@@ -413,8 +413,8 @@
 										</div>
 
 										<div class="card-body d-flex align-items-center justify-content-between lh-sm">
-											<div>
-												<div v-if="task.updatedDate &&  (new Date(task.updatedDate) < new Date().setDate(new Date().getDate() - 2))" class="alert alert-warning alert-sm d-flex align-items-center justify-content-between w-100">
+											<div class="w-100">
+												<div v-if="task.updatedDate &&  (new Date(task.updatedDate).setHours(0,0,0) < new Date(new Date().setHours(0,0,0)).setDate(new Date().getDate() - 2))" class="alert alert-warning alert-sm d-flex align-items-center justify-content-between w-100">
 													This task has not been updated for 2 days, is it up to date? 
 													<button @click="task.updatedDate = Date.now()" class="btn btn-warning btn-sm">Dismiss</button>
 												</div>
